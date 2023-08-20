@@ -76,28 +76,26 @@ class KeyAnaylsis:
         print('Major or Minor:', major_or_minor)
 
 
-class PlotCircle:
+class DetermineXY:
 
-    def where_is_circle(x, y):
+    def determine_xy_function(self, current_interval):
+
         if len(intervals.captured_notes) > 0:
             current_interval = intervals.captured_notes[-1]
-        else:
-            # Default value when no notes have been captured
-            current_interval = 0
 
         # Calculate changes in x and y coordinates based on the interval and current note
         x_change, y_change = 0, 0
         if current_interval in [0, 4, 5]:
-            print('y up')
+            #print('y up')
             y_change = 10
         elif current_interval in [1, 6, 11]:
             y_change = -10
-            print('y down')
+            #print('y down')
         elif current_interval in [2, 8, 9, 10]:
             x_change = 10
-            print('x up')
+            #print('x up')
         elif current_interval in [3, 7]:
-            print('x down')
+            #print('x down')
             x_change = -10
 
         return x + x_change, y + y_change

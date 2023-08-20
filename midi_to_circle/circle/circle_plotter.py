@@ -2,60 +2,30 @@
 Module: circle_plotter
 Author: Mae Horak for masters thesis - Synesthetic Composition 2023
 Description: Draws Circle in Kivy window - Circle moves based on "mood" of music
+
+This particular module written using the help of chatGPT
 """
+import matplotlib.pyplot as plt
 
-from kivy.app import App
-from kivy.clock import mainthread
-from kivy.graphics import Ellipse, Color
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
-from kivy.uix.widget import Widget
+class CirclePlotter:
+    def __init__(self):
+        self.x_positions = []
+        self.y_positions = []
+        self.circle_radius = 0.1
 
+    def plot_circle(self, x_coordinate, y_coordinate):
+        plt.ion()  # Turn on interactive mode for continuous updating
+        fig, ax = plt.subplots()
 
-class CircleWidget(Widget):
-    def __init__(self, **kwargs):
-        super(CircleWidget, self).__init__(**kwargs)
-        self.size_hint = (None, None)
-        self.size = (400, 400)
+        self.x_positions.append(x_coordinate)
+        self.y_positions.append(y_coordinate)
 
-        self.x_coordinate = 150  # Initialize x coordinate
-        self.y_coordinate = 150  # Initialize y coordinate
-        self.delta_x = 0
-        self.delta_y = 0
+        ax.clear()
+        ax.plot(self.x_positions, self.y_positions, 'bo')  # Plot circle positions
+        ax.set_xlim(0, 11)  # Adjust x-axis limits
+        ax.set_ylim(0, 1)   # Adjust y-axis limits
+        ax.set_aspect('equal')  # Set aspect ratio to make the circle circular
+        ax.add_artist(plt.Circle((x_coordinate, y_coordinate), self.circle_radius, color='r'))  # Plot the circle
 
-        with self.canvas:
-            self.circle_color = Color(1, 1, 1)
-            self.circle = Ellipse(pos=(self.x_coordinate, self.y_coordinate), size=(100, 100))
-
-    @mainthread
-    def update_circle_position(self):
-        print("Before update:")
-        print("x_coordinate:", self.x_coordinate)
-        print("y_coordinate:", self.y_coordinate)
-        print("delta_x:", self.delta_x)
-        print("delta_y:", self.delta_y)
-
-        self.x_coordinate += self.delta_x
-        self.y_coordinate += self.delta_y
-        self.circle.pos = (self.x_coordinate, self.y_coordinate)
-        self.canvas.ask_update()
-
-        print("After update:")
-        print("x_coordinate:", self.x_coordinate)
-        print("y_coordinate:", self.y_coordinate)
-
-        print("delta_x:", self.delta_x)
-        print("delta_y:", self.delta_y)
-
-class CircleApp(App):
-    def build(self):
-        circle_widget = CircleWidget()
-        layout = BoxLayout(orientation='vertical')
-        layout.add_widget(Label(text="Use arrow keys to control the circle's position."))
-        layout.add_widget(circle_widget)
-        return layout
-
-    def update_circle_from_analysis(self, x, y):
-        circle_widget = self.root.children[1]  # Get the CircleWidget instance from the layout
-        circle_widget.update_circle_position(x, y)
-
+        plt.draw()
+        plt.pause(0.1)  # Pause to allow for continuous plotting

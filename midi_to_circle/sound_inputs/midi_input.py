@@ -7,15 +7,14 @@ Takes the input from midi keyboard and plays the note using a basic sine wave or
 
 import mido
 import numpy as np
+import queue
 import sounddevice as sd
 from sound_inputs import intervals
 
 class MidiInput:
     """
     This class handles the midi input, sets backend, plays sinewave
-
-    Outputs x and y coordinates used to graph "mood" visuals/probabilities
-
+    Creates a queue for note intervals to continally update which note is being played
     """
 
     def __init__(self):
@@ -23,6 +22,8 @@ class MidiInput:
         # self.circle_widget = circle_widget
         # self.x_coordinate = circle_widget.x_coordinate
         # self.y_coordinate = circle_widget.y_coordinate
+
+        self.note_queue = queue.Queue()  # Create a queue for note intervals
 
         self.previous_note = None
         self.input_name = None
@@ -51,21 +52,28 @@ class MidiInput:
         sd.play(audio_data, sample_rate, blocking=True)  # Use blocking=True to ensure audio is played
 
     def music_music(self):
+        """
+        If the note is being pressed on midi keyboard, play sinewave
+        :queue: int - the interval of the current note being played
+        """
+
         while True:
             for message in self.port.iter_pending():
+
                 if message.type == 'note_on':
-                    current_note = message.note % 12
-                    # if current_note != self.previous_note:
-                    #     self.x_coordinate, self.y_coordinate = self.where_is_circle(self.x_coordinate,
-                    #                                                                 self.y_coordinate)
-                    #     self.circle_widget.delta_x = self.x_coordinate
-                    #     self.circle_widget.delta_y = self.y_coordinate
-                    #     self.circle_widget.update_circle_position()
-                    #     self.previous_note = current_note
 
                     frequency = 2 ** ((message.note - 69) / 12) * 440
-                    duration = 0.05  # Duration in seconds (you can adjust this)
+                    duration = 0.5  # Duration in seconds (you can adjust this)
                     self.play_sound(frequency, duration)
+
+                    current_note = message.note % 12
+                    intervals.captured_notes.append(current_note)
+
+
+                    if self.note_queue.qsize() == 0:
+                        self.note_queue.put(current_note)
+                    elif current_note != self.previous_note:
+                        self.note_queue.put(current_note)
 
 
 
