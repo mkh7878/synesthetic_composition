@@ -69,11 +69,14 @@ class MidiInput:
                     current_note = message.note % 12
                     intervals.captured_notes.append(current_note)
 
-
                     if self.note_queue.qsize() == 0:
                         self.note_queue.put(current_note)
+                        # event_trigger.trigger_note_event()  # Trigger the event here
+
                     elif current_note != self.previous_note:
                         self.note_queue.put(current_note)
+                        # event_trigger.trigger_note_event()  # Trigger the event here
+
 
 
 

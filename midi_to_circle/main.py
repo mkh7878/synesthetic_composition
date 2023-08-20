@@ -12,10 +12,9 @@ https://github.com/mkh7878/synesthetic_composition
 
 """
 
-from circle import circle_plotter
+from circle.circle_plotter import CirclePlotter
 from sound_inputs import intervals, midi_input, mood_analysis
 from sound_inputs.midi_input import MidiInput
-from sound_inputs.mood_analysis import DetermineXY
 import threading
 
 
@@ -28,19 +27,17 @@ def main():
     music_thread = threading.Thread(target=midi_input.music_music)
     music_thread.start()
 
+    plotter = CirclePlotter()
+    circle_thread = threading.Thread(target=plotter.start_plot())
+    circle_thread.start()
+
     #Prints current interval (for debugging)
     while True:
         current_note_interval = midi_input.note_queue.get()  # Get the interval from the queue
         print(current_note_interval)
         # Process the interval or perform other actions as needed
 
-
-    # determine_xy = DetermineXY()
-    # x_coordinate, y_coordinate = determine_xy.determine_xy_function()
-    #
-    # plot_thread = threading.Thread(target=start_plotter, args=(x_coordinate, y_coordinate))
-    # plot_thread.start()
-
+    #pass circleplotter the current note & update circle
 
 
 
