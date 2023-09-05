@@ -16,7 +16,7 @@ class CirclePlotter:
     graph_size = 100
 
     def __init__(self, event):
-        self.circle_radius = 0.1
+        self.circle_radius = 0.01
         self.captured_notes_lock = threading.Lock()
         self.event = event
 

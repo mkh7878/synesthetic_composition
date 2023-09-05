@@ -10,7 +10,7 @@ import numpy as np
 import queue
 import sounddevice as sd
 from sound_inputs import intervals, mood_analysis
-from utils.event_handler import EventHandler
+# from utils.event_handler import EventHandler
 import threading
 
 
@@ -21,7 +21,7 @@ class MidiInput:
     Creates a queue for note intervals to continually update which note is being played
     """
 
-    event_handler = EventHandler()
+    # event_handler = EventHandler()
 
     def __init__(self, event):
 
@@ -69,18 +69,18 @@ class MidiInput:
                 if message.type == 'note_on':
 
                     self.event = threading.Event()
-                    self.event_handler.note_pressed = True
+                    # self.event_handler.note_pressed = True
 
-                    if self.event_handler.note_pressed == True:
-                        # print('new note pressed!')
+                    # if self.event_handler.note_pressed == True:
+                    #     # print('new note pressed!')
 
-                        frequency = 2 ** ((message.note - 69) / 12) * 440
-                        duration = 0.1  # Duration in seconds
-                        self.play_sound(frequency, duration)
+                    frequency = 2 ** ((message.note - 69) / 12) * 440
+                    duration = 0.1  # Duration in seconds
+                    self.play_sound(frequency, duration)
 
-                        current_note = message.note % 12
-                        print(intervals.notes[current_note])
-                        print(intervals.captured_notes)
+                    current_note = message.note % 12
+                    print(intervals.notes[current_note])
+                    print(intervals.captured_notes)
 
                     with self.captured_notes_lock:
                         intervals.captured_notes.append(current_note)
@@ -91,20 +91,20 @@ class MidiInput:
                     else:
                         self.note_queue.put(current_note)
 
-                    if len(intervals.captured_notes) > 1:
-                        with self.captured_notes_lock:
-                            if current_note != intervals.captured_notes[-2]:
-                                self.event_handler.new_note = True
-                                self.event.set()
+                    # if len(intervals.captured_notes) > 1:
+                    #     with self.captured_notes_lock:
+                    #         if current_note != intervals.captured_notes[-2]:
+                                # self.event_handler.new_note = True
+                                # self.event.set()
 
 
-                elif message.type == 'note_off':
+               # elif message.type == 'note_off':
 
-                    self.event_handler.note_pressed = False
-
-                    self.event_handler.note_off = True
-
-                    self.event_handler.new_note = False
+                    # self.event_handler.note_pressed = False
+                    #
+                    # self.event_handler.note_off = True
+                    #
+                    # self.event_handler.new_note = False
 
 
 

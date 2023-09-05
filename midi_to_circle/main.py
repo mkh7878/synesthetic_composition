@@ -18,13 +18,12 @@ https://github.com/mkh7878/synesthetic_composition
 # from sound_inputs.mood_analysis import KeyAnaylsis
 # from video_output.happy_sad import HappySad
 # import threading
-#
-
 
 from circle.circle_plotter import CirclePlotter
-from sound_inputs import intervals, midi_input, mood_analysis
+# from sound_inputs import intervals, midi_input, mood_analysis
 from sound_inputs.midi_input import MidiInput
 import threading
+from video_output.color_window import SynestheticApp
 
 
 def main():
@@ -38,18 +37,10 @@ def main():
     music_thread = threading.Thread(target=midi_input.music_music)
     music_thread.start()
 
-    plotter = CirclePlotter(event)
-    circle_thread = threading.Thread(target=plotter.start_plot())
-    circle_thread.start()
-
-    #Prints current interval (for debugging)
-    while True:
-        current_note_interval = midi_input.note_queue.get()  # Get the interval from the queue
-        print(current_note_interval)
-        # Process the interval or perform other actions as needed
-
-    #pass circleplotter the current note & update circle
-
+    # plotter = CirclePlotter(event)
+    # circle_thread = threading.Thread(target=plotter.start_plot())
+    # circle_thread.start()
 
 if __name__ == "__main__":
     main()
+    SynestheticApp().run()
