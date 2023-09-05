@@ -7,6 +7,7 @@ Description: Analyses the key, mode, major/minor ect. of music being played
 from sound_inputs import intervals
 import time
 
+
 class KeyAnaylsis:
 
     def determine_key(self,  captured_notes):
@@ -40,12 +41,13 @@ class KeyAnaylsis:
         A major scale uses the major third (+4 intervals) while the minor scale uses the minor third (+5 intervals)
         To estimate if the key is major or minor we see which (major or minor third) is used more often
         And see the major_or_minor value to true or false (default is true)
+        
         """
 
         key_major_third =  (12-(8-likely_key))%12
-        #print('major third:', intervals.notes[key_major_third])
+        # print('major third:', intervals.notes[key_major_third])
         key_minor_third = (12-(9-likely_key))%12
-        #print('minor third:', intervals.notes[key_minor_third])
+        # print('minor third:', intervals.notes[key_minor_third])
 
         likely_key_letter = intervals.notes[likely_key]
 
@@ -67,12 +69,27 @@ class KeyAnaylsis:
 
     def song_key_analysis(self):
         """
-        waits a set number of seconds and then estimates the key of the music being played
+        Waits a set number of seconds and then estimates the key of the music being played
+        This runs in a thread in main
+
         """
-        time.sleep(10)
-        likely_key, major_or_minor, likely_key_letter = determine_key(intervals.captured_notes)
+        time.sleep(5)
 
-        print('Likely Key:', likely_key_letter)
-        print('Major or Minor:', major_or_minor)
+        likely_key, major_or_minor, likely_key_letter = self.determine_key(intervals.captured_notes)
 
+        intervals.current_key = likely_key
 
+        print(intervals.current_key, "current key according to intervals")
+
+        # print('Likely Key:', likely_key_letter)
+        # print('Major or Minor:', major_or_minor)
+
+    def determine_interval_from_key(self):
+        """
+        determines interval relative to current key
+
+        :return: int - interval relative to current key
+
+        """
+
+        intervals.current_key

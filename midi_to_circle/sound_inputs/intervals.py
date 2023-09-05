@@ -8,19 +8,22 @@ Interval Recurrence List which tallies how many times a notes has been played
 These are used in analysis of key and mood of the music
 """
 
-
-##Lists of intervals and other info need for audio analysis
+# Lists of intervals and other info need for audio analysis
 notes = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
-#holds values of which note (determined by index value) has been played however many times
+
+# Holds values of which note (determined by index value) has been played however many times
 interval_recurrence_list = [0,0,0,0,0,0,0,0,0,0,0,0]
-#hold captured notes
+
+# Hold captured notes
 captured_notes = []
-#current key of music determined using analyze function in mood.py
+
+# Current key of music determined using analyze function in mood.py
 current_key = None
-#is the key major or minor?
+
+# Is the key major or minor?
 major = True
 
-#tells how the interval should affect x and y coordinates
+# Tells how the interval should affect x and y coordinates
 plotting_intervals = {
     0: 'plus_Y',
     1: 'minus_Y',

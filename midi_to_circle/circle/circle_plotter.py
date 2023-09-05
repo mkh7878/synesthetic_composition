@@ -8,11 +8,17 @@ This particular module written using the help of chatGPT
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from sound_inputs import intervals
+import threading
+
 
 class CirclePlotter:
 
-    def __init__(self):
+    graph_size = 100
+
+    def __init__(self, event):
         self.circle_radius = 0.1
+        self.captured_notes_lock = threading.Lock()
+        self.event = event
 
     def determine_xy_function(self, x, y):
 
@@ -35,7 +41,6 @@ class CirclePlotter:
 
         return x + x_change, y + y_change
 
-
     def update_plot(self, frame):
         self.ax.clear()
 
@@ -49,17 +54,21 @@ class CirclePlotter:
         self.y_positions.append(y_coordinate)
 
         self.ax.plot(self.x_positions, self.y_positions, 'bo')
-        self.ax.set_xlim(-20, 20)
-        self.ax.set_ylim(-20, 20)
+        self.ax.set_xlim(-self.graph_size, self.graph_size)
+        self.ax.set_ylim(-self.graph_size, self.graph_size)
         self.ax.set_aspect('equal')
         self.ax.add_artist(plt.Circle((x_coordinate, y_coordinate), self.circle_radius, color='r'))
+
 
     def start_plot(self):
         self.fig, self.ax = plt.subplots()  # Create the figure and axis here
         self.x_positions = []
         self.y_positions = []
-        ani = FuncAnimation(self.fig, self.update_plot, interval=100)  # Change interval as needed
-        plt.show()
 
+        while not self.event.is_set():  # Continue until the event is set
+            self.update_plot(None)
+            plt.pause(0.1)  # Pause briefly before updating the plot
+
+        plt.show()
 
 
