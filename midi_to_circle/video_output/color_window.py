@@ -13,6 +13,16 @@ from kivy.clock import Clock  # Import Clock for scheduled updates
 from sound_inputs import intervals
 
 class ColorChangeBox(BoxLayout):
+    """
+    change_color: takes RGB values and updates the color tuple
+
+    determine_color: determines color based on "mood" of intervals
+        :return: int - red value
+        :return: int - green value
+        :return: int - blue value
+
+    update_rectangle: updates color of rectangle
+    """
 
     def __init__(self, **kwargs):
         super(ColorChangeBox, self).__init__(**kwargs)
@@ -39,6 +49,7 @@ class ColorChangeBox(BoxLayout):
 
             current_interval = intervals.captured_notes[-1]  # Most recently captured note
 
+            # Based on "mood" of intervals.
             if current_interval in [0, 4, 5]:
                 return 1, 0, 0
 
@@ -55,9 +66,13 @@ class ColorChangeBox(BoxLayout):
         self.change_color()
 
 class SynestheticApp(App):
+    """
+    Self explanatory - builds kivy app
+    """
+
     def build(self):
         layout = ColorChangeBox()
         return layout
 
-if __name__ == "__main__":
-    SynestheticApp().run()
+# if __name__ == "__main__":
+#     SynestheticApp().run()

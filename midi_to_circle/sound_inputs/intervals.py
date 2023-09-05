@@ -2,10 +2,10 @@
 Module: intervals.py
 Author: Mae Horak for masters thesis - Synesthetic Composition 2023
 Description:
-Stores lists and dictionaries of information on musical intervals/music theory
-As well as the lists of Captured Notes that holds all notes captured, and the
-Interval Recurrence List which tallies how many times a notes has been played
-These are used in analysis of key and mood of the music
+Stores lists and dictionaries of information relating to the music being played.
+
+These are accessed and used from other modules.
+
 """
 
 # Lists of intervals and other info need for audio analysis
