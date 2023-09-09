@@ -9,8 +9,10 @@ import kivy
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Color, Rectangle
+from kivy.uix.label import Label
 from kivy.clock import Clock  # Import Clock for scheduled updates
 from sound_inputs import intervals
+
 
 class ColorChangeBox(BoxLayout):
     """
@@ -27,6 +29,9 @@ class ColorChangeBox(BoxLayout):
     def __init__(self, **kwargs):
         super(ColorChangeBox, self).__init__(**kwargs)
         self.orientation = 'vertical'
+
+        # Change the size_hint to adjust the size
+        self.size_hint = (1, 1)  # Set the size hint to fill the window
 
         with self.canvas.before:
             self.color = Color(0, 0, 0, 1)  # Initialize with black color
@@ -69,10 +74,6 @@ class SynestheticApp(App):
     """
     Self explanatory - builds kivy app
     """
-
     def build(self):
         layout = ColorChangeBox()
         return layout
-
-# if __name__ == "__main__":
-#     SynestheticApp().run()

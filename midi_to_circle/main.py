@@ -16,6 +16,7 @@ from sound_inputs.midi_input import MidiInput
 import threading
 from video_output.color_window import SynestheticApp
 from sound_inputs.mood_analysis import KeyAnaylsis
+from video_output.images import ImageSwitcherApp
 
 def main():
     # event = threading.Event()
@@ -28,9 +29,12 @@ def main():
     music_thread = threading.Thread(target=midi_input.music_music)
     music_thread.start()
 
-#    analyse =
+    mood_analysis = KeyAnaylsis()
+
+    analyse_key = threading.Thread(target=mood_analysis.song_key_analysis)
+    analyse_key.start()
+
 
 if __name__ == "__main__":
     main()
-    SynestheticApp().run()
-
+    ImageSwitcherApp().run()

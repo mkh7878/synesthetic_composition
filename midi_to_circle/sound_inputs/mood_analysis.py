@@ -22,8 +22,9 @@ class KeyAnaylsis:
         :return: str - Whether the key is major or minor.
         :return: str - The letter representation of the likely key.
 
-    song_key_analysis: Waits a set number of seconds and then estimates the key of the music being played
-        Prints key.
+    song_key_analysis: Continually checks what key the song is in.
+        Waits a set number of seconds and then estimates the key of the music being played
+        Prints key to terminal.
 
     TODO: determine_interval_from_key: Re-assigns intervals based on key, which is updated repeatedly.
 
@@ -73,17 +74,17 @@ class KeyAnaylsis:
         return likely_key, major_or_minor, likely_key_letter
 
     def song_key_analysis(self):
+
+        while True:
         # Time it waits in seconds
-        time.sleep(5)
+            time.sleep(5)
 
-        likely_key, major_or_minor, likely_key_letter = self.determine_key(intervals.captured_notes)
+            likely_key, major_or_minor, likely_key_letter = self.determine_key(intervals.captured_notes)
 
-        intervals.current_key = likely_key
+            intervals.current_key = likely_key
 
-        print(intervals.current_key, "current key according to intervals")
-
-        # print('Likely Key:', likely_key_letter)
-        # print('Major or Minor:', major_or_minor)
+            print('Likely Key:', likely_key_letter)
+            print('Major or Minor:', major_or_minor)
 
     def determine_interval_from_key(self):
         """
