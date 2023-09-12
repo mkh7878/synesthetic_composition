@@ -1,8 +1,18 @@
+"""
+Module: midi_input_font.py
+Author: Mae Horak for masters thesis - Synesthetic Composition 2023
+Description:
+Takes the input from midi keyboard and plays the note using a midi font (sounds like piano)
+Adds interval to list of intervals and prints music note to console for analysis
+
+"""
+
 import fluidsynth
 import mido
 import threading
 import time
 from sound_inputs import intervals  # Assuming you have a module named 'intervals'
+from sound_inputs import mood_analysis
 
 class MidiInputFont:
 
@@ -24,6 +34,11 @@ class MidiInputFont:
         # Lock for capturing notes
         self.captured_notes_lock = threading.Lock()
 
+        # Create Instance of KeyAnalysis
+        self.key_analysis = mood_analysis.KeyAnaylsis
+
+
+
     def play_midi_font(self):
         # Main loop for receiving and playing MIDI notes
         try:
@@ -35,6 +50,11 @@ class MidiInputFont:
                         current_note = msg.note % 12
                         # Prints what note is being played to console
                         print(intervals.notes[current_note])
+
+                        self.key_analysis.determine_interval_from_key(self)
+
+                        if intervals.rel_interval_mood != None:
+                            print(intervals.rel_interval_mood)
 
                         with self.captured_notes_lock:
                             # Adds note to list of captured notes

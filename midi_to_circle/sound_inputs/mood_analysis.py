@@ -87,6 +87,23 @@ class KeyAnaylsis:
             print('Major or Minor:', major_or_minor)
 
     def determine_interval_from_key(self):
-        """
-        TODO: Intervals "moods" will update based on current key.
-        """
+
+        if intervals.current_key != None and len(intervals.captured_notes) > 1:
+            current_key = intervals.current_key
+
+            current_interval = intervals.captured_notes[-1]
+
+            relative_current_interval = (current_key-current_interval)%12
+
+            # happy
+            if relative_current_interval in [0, 4, 5]:
+                intervals.rel_interval_mood = 'good'
+
+            if relative_current_interval in [1, 6, 11]:
+                intervals.rel_interval_mood = 'evil'
+
+            if relative_current_interval in [2, 3, 9, 10]:
+                intervals.rel_interval_mood = 'exciting'
+
+            if relative_current_interval in [3, 7]:
+                intervals.rel_interval_mood = 'moody'

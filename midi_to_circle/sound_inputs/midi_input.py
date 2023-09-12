@@ -2,7 +2,7 @@
 Module: midi_input.py
 Author: Mae Horak for masters thesis - Synesthetic Composition 2023
 Description:
-Takes the input from midi keyboard and plays the note using a basic sine wave or a midi font
+Takes the input from midi keyboard and plays the note using a basic sine wave
 Adds interval to list of intervals and prints music note to console for analysis
 
 """

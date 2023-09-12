@@ -23,6 +23,10 @@ current_key = None
 # Is the key major or minor?
 major = True
 
+# What is the mood of interval?
+
+rel_interval_mood = None
+
 # Tells how the interval should affect x and y coordinates
 plotting_intervals = {
     0: 'plus_Y',
