@@ -13,6 +13,7 @@ import queue
 import sounddevice as sd
 from sound_inputs import intervals, mood_analysis
 import threading
+from video_output.images import ImageSwitcherApp
 
 
 class MidiInput:
@@ -35,6 +36,7 @@ class MidiInput:
         self.input_name = None
         self.port = None
         self.captured_notes_lock = threading.Lock()
+
 
     def find_midi_device(self):
         mido.set_backend('mido.backends.portmidi')

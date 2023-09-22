@@ -27,6 +27,9 @@ major = True
 
 rel_interval_mood = None
 
+
+note_durations = []
+
 # Tells how the interval should affect x and y coordinates
 plotting_intervals = {
     0: 'plus_Y',
