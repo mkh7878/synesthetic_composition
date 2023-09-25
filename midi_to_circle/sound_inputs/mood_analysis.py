@@ -26,15 +26,26 @@ class KeyAnaylsis:
         Waits a set number of seconds and then estimates the key of the music being played
         Prints key to terminal.
 
-    TODO: determine_interval_from_key: Re-assigns intervals based on key, which is updated repeatedly.
+    determine_interval_from_key: Re-assigns intervals based on key, which is updated repeatedly.
 
     """
 
     def determine_key(self,  captured_notes):
 
-        for note in range(len(captured_notes)):
-            note_to_tally = captured_notes[note]
-            intervals.interval_recurrence_list[note_to_tally] += 1
+        if len(intervals.captured_notes) > 50:
+            # Get the last 30 notes from the captured_notes list
+            last_30_notes = captured_notes[-50:]
+
+            # Iterate over the last 30 notes
+            for note in last_30_notes:
+                note_to_tally = note
+                intervals.interval_recurrence_list[note_to_tally] += 1
+
+        else:
+
+            for note in range(len(captured_notes)):
+                note_to_tally = captured_notes[note]
+                intervals.interval_recurrence_list[note_to_tally] += 1
 
         how_many_times = 0
         likely_key = 0

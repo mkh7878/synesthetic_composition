@@ -24,9 +24,10 @@ current_key = None
 major = True
 
 # What is the mood of interval?
-
 rel_interval_mood = None
 
+x_coordinate = 15
+y_coordinate = 15
 
 note_durations = []
 

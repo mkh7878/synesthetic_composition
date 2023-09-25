@@ -14,6 +14,7 @@ import time
 from sound_inputs import intervals  # Assuming you have a module named 'intervals'
 from sound_inputs import mood_analysis
 from video_output.images import ImageSwitcherApp
+from video_output.save_to_csv import CsvWriter
 
 class MidiInputFont:
 
@@ -27,7 +28,6 @@ class MidiInputFont:
         self.fs.start(driver="coreaudio", midi_driver="coremidi")  # Adjust the driver options as needed
         sfid = self.fs.sfload(soundfont_file)
         self.fs.program_select(0, sfid, 0, 0)
-        self.fs.setting('synth.sample-rate', sample_rate)  # Set the sample rate
 
         # Initialize MIDI input
         self.midi_input = mido.open_input()
@@ -40,42 +40,8 @@ class MidiInputFont:
 
         # Create an instance of ImageSwitcherApp and store it as an attribute
         self.image_switcher_app = ImageSwitcherApp()
-    #
-    # def play_midi_font(self):
-    #     # Main loop for receiving and playing MIDI notes
-    #     try:
-    #         while True:
-    #             for msg in self.midi_input.iter_pending():
-    #                 if msg.type == "note_on":
-    #                     self.fs.noteon(0, msg.note, msg.velocity)
-    #
-    #                     # # Trigger the callback in ImageSwitcherApp to update the image
-    #                     # if self.image_switcher_app is not None:
-    #                     #     self.image_switcher_app.update_image_callback()
-    #
-    #                     current_note = msg.note % 12
-    #                     # Prints what note is being played to console
-    #                     print(intervals.notes[current_note])
-    #
-    #                     self.key_analysis.determine_interval_from_key(self)
-    #
-    #                     if intervals.rel_interval_mood != None:
-    #                         print(intervals.rel_interval_mood)
-    #
-    #                     with self.captured_notes_lock:
-    #                         # Adds note to list of captured notes
-    #                         intervals.captured_notes.append(current_note)
-    #
-    #                 elif msg.type == "note_off":
-    #                     self.fs.noteoff(0, msg.note)
-    #             time.sleep(0.01)  # Small delay to reduce CPU usage
-    #
-    #     except KeyboardInterrupt:
-    #         pass
 
-    import threading
-    import threading
-    import time
+        self.csv_writer = CsvWriter()
 
     def play_midi_font(self):
         # Dictionary to keep track of active notes and their corresponding timestamps
@@ -100,8 +66,22 @@ class MidiInputFont:
                         with self.captured_notes_lock:
                             intervals.captured_notes.append(current_note)
 
+                        self.x_coor, self.y_coor = self.image_switcher_app.determine_color()
+
+                        intervals.y_coordinate = self.y_coor
+                        intervals.x_coordinate = self.x_coor
+
                         # Store the timestamp when the note was turned on
                         active_notes[msg.note] = current_time
+
+                        # Add data to CSV file using self.csv_writer
+                        self.csv_writer.addDataRow(
+                            msg.note,  # Captured Note
+                            intervals.current_key,  # Current Key
+                            intervals.rel_interval_mood,  # Mood
+                            self.x_coor,  # X Coordinate
+                            self.y_coor  # Y Coordinate
+                        )
 
                     elif msg.type == "note_off":
                         if msg.note in active_notes:
@@ -120,8 +100,10 @@ class MidiInputFont:
 
                 time.sleep(0.01)  # Small delay to reduce CPU usage
 
+
         except KeyboardInterrupt:
             pass
+
         # Clean up
         self.midi_input.close()
         self.fs.delete()
