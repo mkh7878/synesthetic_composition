@@ -2,21 +2,25 @@
 Module: midi_input_font.py
 Author: Mae Horak for masters thesis - Synesthetic Composition 2023
 Description:
-Takes the input from midi keyboard and plays the note using a midi font (sounds like piano)
+Takes the input from midi keyboard and plays the note using a midi font (sounds like piano) for the duration that the
+key is held down.
 Adds interval to list of intervals and prints music note to console for analysis
 
 """
 
 import fluidsynth
 import mido
+from sound_inputs import intervals, mood_analysis
 import threading
 import time
-from sound_inputs import intervals  # Assuming you have a module named 'intervals'
-from sound_inputs import mood_analysis
 from video_output.images import ImageSwitcherApp
 from video_output.save_to_csv import CsvWriter
 
 class MidiInputFont:
+
+    """
+    Sets MIDI font, initialises FluidSynth
+    """
 
     def __init__(self):
         # Replace with the path to your GM.sf2 SoundFont file
@@ -38,9 +42,10 @@ class MidiInputFont:
         # Create Instance of KeyAnalysis
         self.key_analysis = mood_analysis.KeyAnaylsis
 
-        # Create an instance of ImageSwitcherApp and store it as an attribute
+        # Create an instance of ImageSwitcherApp
         self.image_switcher_app = ImageSwitcherApp()
 
+        # Create an instance of CsvWriter
         self.csv_writer = CsvWriter()
 
     def play_midi_font(self):
@@ -55,17 +60,23 @@ class MidiInputFont:
                     if msg.type == "note_on":
                         self.fs.noteon(0, msg.note, msg.velocity)
 
+                        # Determines which musical note and prints it's letter value
                         current_note = msg.note % 12
                         print(intervals.notes[current_note])
 
+
+                        # Determines which interval is being played relative to key
                         self.key_analysis.determine_interval_from_key(self)
 
+                        # Prints mood of music
                         if intervals.rel_interval_mood is not None:
                             print(intervals.rel_interval_mood)
 
                         with self.captured_notes_lock:
                             intervals.captured_notes.append(current_note)
 
+                        # uses function from the Image Switcher to change the x and y coordinates
+                        # This determines which image is displayed in the kivy application
                         self.x_coor, self.y_coor = self.image_switcher_app.determine_color()
 
                         intervals.y_coordinate = self.y_coor

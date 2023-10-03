@@ -12,7 +12,6 @@ played more than the other.
 from sound_inputs import intervals
 import time
 
-
 class KeyAnaylsis:
 
     """
@@ -33,16 +32,16 @@ class KeyAnaylsis:
     def determine_key(self,  captured_notes):
 
         if len(intervals.captured_notes) > 50:
-            # Get the last 30 notes from the captured_notes list
+            # Get the last 50 notes from the captured_notes list
             last_30_notes = captured_notes[-50:]
 
-            # Iterate over the last 30 notes
+            # Iterate over the last 50 notes
             for note in last_30_notes:
                 note_to_tally = note
                 intervals.interval_recurrence_list[note_to_tally] += 1
 
         else:
-
+            # If less than 50 notes have been played, determine which note has been played the most overall
             for note in range(len(captured_notes)):
                 note_to_tally = captured_notes[note]
                 intervals.interval_recurrence_list[note_to_tally] += 1
@@ -50,6 +49,7 @@ class KeyAnaylsis:
         how_many_times = 0
         likely_key = 0
 
+        # Set whichever note has been played the most as the likely key!
         for tally in range(12):
             if intervals.interval_recurrence_list[tally] > how_many_times:
                 how_many_times = intervals.interval_recurrence_list[tally]
@@ -62,16 +62,16 @@ class KeyAnaylsis:
         """
 
         key_major_third =  (12-(8-likely_key))%12
-        # print('major third:', intervals.notes[key_major_third])
         key_minor_third = (12-(9-likely_key))%12
-        # print('minor third:', intervals.notes[key_minor_third])
 
         likely_key_letter = intervals.notes[likely_key]
 
+        # If the major 3rd is played more, it's likely in a major key
         if intervals.interval_recurrence_list[key_major_third] > intervals.interval_recurrence_list[key_minor_third]:
             major_or_minor = 'major'
             intervals.major = True
 
+        # If the minor 3rd is played more it's likely in a minor key
         elif intervals.interval_recurrence_list[key_minor_third] > intervals.interval_recurrence_list[key_major_third]:
             major_or_minor = 'minor'
             intervals.major = False
@@ -80,6 +80,7 @@ class KeyAnaylsis:
             print('The music is in the key of', likely_key_letter, ', but we can not yet determine if it is major or minor.')
             major_or_minor = 'can not yet determine if it is major or minor'
 
+        # Saves the likely key as the key to be accessed by other modules
         intervals.current_key = likely_key
 
         return likely_key, major_or_minor, likely_key_letter
@@ -87,7 +88,7 @@ class KeyAnaylsis:
     def song_key_analysis(self):
 
         while True:
-        # Time it waits in seconds
+            # This will run to update the possible key every 5 seconds
             time.sleep(5)
 
             likely_key, major_or_minor, likely_key_letter = self.determine_key(intervals.captured_notes)
@@ -108,14 +109,14 @@ class KeyAnaylsis:
             print(relative_current_interval)
 
             # happy
-            if relative_current_interval in [0, 4, 5, 7]:
+            if relative_current_interval in [0, 4, 5]:
                 intervals.rel_interval_mood = 'good'
 
             if relative_current_interval in [1, 6, 11]:
                 intervals.rel_interval_mood = 'evil'
 
-            if relative_current_interval in [2, 3, 10]:
+            if relative_current_interval in [2, 10, 7]:
                 intervals.rel_interval_mood = 'exciting'
 
-            if relative_current_interval in [8, 9]:
+            if relative_current_interval in [8, 9, 3]:
                 intervals.rel_interval_mood = 'moody'
