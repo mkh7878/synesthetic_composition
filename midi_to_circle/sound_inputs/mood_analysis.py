@@ -3,10 +3,12 @@ Module: mood_analysis.py
 Author: Mae Horak for masters thesis - Synesthetic Composition 2023
 Description: Analyses the key, mode, major/minor ect. of music being played
 
+*********************************************************************************************
+
 According to the Krumhansl and Kessler 1982 theory of tonal hierarchies, the key of the piece is likely the note
 played most, and then it's possible to see whether the key is major or minor based on if the major or minor 3rd is
 played more than the other.
-*********************************************************************************************
+
 """
 
 from sound_inputs import intervals
@@ -26,6 +28,7 @@ class KeyAnaylsis:
         Prints key to terminal.
 
     determine_interval_from_key: Re-assigns intervals based on key, which is updated repeatedly.
+        Prints interval to terminal.
 
     """
 
@@ -108,15 +111,18 @@ class KeyAnaylsis:
             relative_current_interval = (current_interval - current_key)%12
             print(relative_current_interval)
 
-            # happy
+            # balanced
             if relative_current_interval in [0, 4, 5]:
                 intervals.rel_interval_mood = 'good'
 
+            # dissonant m2, A4, M7
             if relative_current_interval in [1, 6, 11]:
                 intervals.rel_interval_mood = 'evil'
 
+            # M2, m7, P5
             if relative_current_interval in [2, 10, 7]:
                 intervals.rel_interval_mood = 'exciting'
 
+            # m6, M6, m3
             if relative_current_interval in [8, 9, 3]:
                 intervals.rel_interval_mood = 'moody'

@@ -20,6 +20,13 @@ class MidiInputFont:
 
     """
     Sets MIDI font, initialises FluidSynth
+
+    play_midi_font:
+        Determines which musical note is being played, adds it to the list of intervals.
+        Uses function from the Image Switcher to change the x and y coordinates.
+        This determines which image is displayed in the kivy application
+        Plays a note that sounds like a piano (from MIDI font) for duration of the key being pressed
+
     """
 
     def __init__(self):
@@ -57,13 +64,15 @@ class MidiInputFont:
                 current_time = time.time()
 
                 for msg in self.midi_input.iter_pending():
+                    # If a key is being pressed on the MIDI keyboard
                     if msg.type == "note_on":
+
+                        msg.velocity = min(msg.velocity + 20, 127)  # Make it 20 units louder, max 127
                         self.fs.noteon(0, msg.note, msg.velocity)
 
-                        # Determines which musical note and prints it's letter value
+                        # Determines which musical note is being played and prints it's letter value
                         current_note = msg.note % 12
                         print(intervals.notes[current_note])
-
 
                         # Determines which interval is being played relative to key
                         self.key_analysis.determine_interval_from_key(self)
@@ -95,6 +104,7 @@ class MidiInputFont:
                         )
 
                     elif msg.type == "note_off":
+
                         if msg.note in active_notes:
                             # Calculate the duration the note was held down
                             note_on_time = active_notes[msg.note]

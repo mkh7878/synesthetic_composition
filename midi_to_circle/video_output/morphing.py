@@ -1,13 +1,17 @@
+"""
+Module: morphing.py
+Author: Mae Horak for masters thesis - Synesthetic Composition 2023
+Description: Takes 4 images and creates a grid of morphs between them, naming with x and y coordinates.
 
-### THIS CODE INTERPOLATES BETWEEN 4 IMAGES AND SAVES THEM WITH x AND y COORDINATES
+"""
 import cv2
 import os
 
 # Load your four corner images
-image1 = cv2.imread('frames/image1.png')
-image2 = cv2.imread('frames/image2.png')
-image3 = cv2.imread('frames/image3.png')
-image4 = cv2.imread('frames/image4.png')
+image1 = cv2.imread('surreal/good.png')
+image2 = cv2.imread('surreal/evil.png')
+image3 = cv2.imread('surreal/exciting.png')
+image4 = cv2.imread('surreal/moody.png')
 
 # Ensure all corner images have the same dimensions
 if image1.shape != image2.shape != image3.shape != image4.shape:
@@ -17,7 +21,7 @@ if image1.shape != image2.shape != image3.shape != image4.shape:
 grid_size = (20, 20)
 
 # Create an output directory (if it doesn't exist)
-output_dir = 'output_images'
+output_dir = 'output_paintings'
 os.makedirs(output_dir, exist_ok=True)
 
 # Perform interpolation and save the interpolated frames

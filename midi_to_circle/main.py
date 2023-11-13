@@ -8,33 +8,42 @@ to live audio to combine the sense of hearing and sight.
 This program takes input from a midi keyboard or live audio through a microphone
 Then uses it to graph x and y coordinates that represent the "mood" of the music
 
-https://github.com/mkh7878/synesthetic_composition
+Sample of the SynComp App : https://www.youtube.com/watch?v=uQ1SgVO0ops
+Github Link: https://github.com/mkh7878/synesthetic_composition
 
 """
 
-from sound_inputs.midi_input import MidiInput
-import threading
-from video_output.color_window import SynestheticApp
+from sound_inputs.midi_input_font import MidiInputFont
 from sound_inputs.mood_analysis import KeyAnaylsis
+import threading
 from video_output.images import ImageSwitcherApp
+from video_output.save_to_csv import CsvWriter
 
 def main():
-    # event = threading.Event()
 
-    # Create an instance of MidiInput class
-    midi_input = MidiInput()
-    midi_input.find_midi_device()
+    # Writes new CSV file - this needs to run before everything else.
+    csv_writer = CsvWriter()
+    csv_writer.createCsv()
 
-    # Start a thread for the music_music method
-    music_thread = threading.Thread(target=midi_input.music_music)
-    music_thread.start()
+    # Starts thread to play midi font and output analysis data
+    midi_input_font = MidiInputFont()
 
+    play_font_thread = threading.Thread(target=midi_input_font.play_midi_font)
+    play_font_thread.start()
+
+    # Starts thread that constantly updates to figure out which key the music is in
     mood_analysis = KeyAnaylsis()
 
     analyse_key = threading.Thread(target=mood_analysis.song_key_analysis)
     analyse_key.start()
 
-
 if __name__ == "__main__":
+
     main()
+
+    # Opens Kivy window displaying imagery
     ImageSwitcherApp().run()
+
+
+
+
