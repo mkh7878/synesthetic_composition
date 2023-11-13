@@ -3,4 +3,5 @@ Masters Thesis for CCI 2023
 
 Synesthetic Composition is the use of reactive imagery that corresponds to live audio
 
-[![Video Link](https://www.youtube.com/watch?v=uQ1SgVO0ops)]
+Video: https://www.youtube.com/watch?v=uQ1SgVO0ops
+
